@@ -10,6 +10,8 @@ services:
       - DB=0.0.0.0:5432
     depends_on:
       - db
+    networks:
+      - test_network
     # ports:
     #   - "8080:8080"
 
@@ -21,3 +23,9 @@ services:
       POSTGRES_DB: library
     ports:
       - "5432:5432"
+    networks:
+      - test_network
+
+networks:
+  test_network:
+    driver: bridge
