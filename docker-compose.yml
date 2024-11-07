@@ -7,6 +7,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - Host=localhost; Database=library; Username=postgres; Password=adminadmin
+      - DB=0.0.0.0:5432
     depends_on:
       - db
     # ports:
@@ -18,3 +19,5 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: adminadmin
       POSTGRES_DB: library
+    ports:
+      - "5432:5432"

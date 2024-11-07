@@ -8,7 +8,7 @@ namespace LibraryApp.Tests.Integration.Tests
 {
     public class DbHelper
     {
-        private readonly static string connectionString = "Host=localhost; Database=library; Username=postgres; Password=adminadmin";
+        private readonly static string connectionString = "Host=0.0.0.0:5432; Database=library; Username=postgres; Password=adminadmin";
 
         private readonly static DataContext context = new DataContext(new DbContextOptionsBuilder<DataContext>()
                 .UseNpgsql(connectionString)
