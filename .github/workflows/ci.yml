@@ -19,7 +19,7 @@ jobs:
       #   run: docker build -t augustvulpes/libraryapp .
 
       - name: Docker run 
-        run: docker compose up
+        run: docker compose up --abort-on-container-exit
 
       # - name: Install dependencies
       #   run: dotnet restore ./src/LibraryApp.csproj
