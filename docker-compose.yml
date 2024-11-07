@@ -21,7 +21,7 @@ services:
       POSTGRES_PASSWORD: adminadmin
       POSTGRES_DB: library
     ports:
-      - "127.0.0.1:5432:5432"
+      - "5432:5432"
     networks:
       - test_network
 
