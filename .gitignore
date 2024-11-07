@@ -1,0 +1,7 @@
+.vs/
+bin/
+obj/
+Migrations/
+technicalUI/build
+
+*/node_modules
