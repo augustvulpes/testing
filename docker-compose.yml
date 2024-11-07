@@ -18,6 +18,7 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: adminadmin
       POSTGRES_DB: library
+      POSTGRES_MAX_CONNECTIONS: 200
     ports:
       - "5432:5432"
     networks:
