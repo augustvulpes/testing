@@ -5,14 +5,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    environment:
-      - Host=localhost; Database=library; Username=postgres; Password=adminadmin
     depends_on:
       - db
     networks:
       - test_network
-    # ports:
-    #   - "8080:8080"
+    ports:
+      - "5000:5000"
 
   db:
     image: postgres:latest
