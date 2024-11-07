@@ -5,7 +5,7 @@ FROM mcr.microsoft.com/dotnet/sdk:7.0 AS test-env
 WORKDIR /app
 
 # Copy everything to the container
-COPY . .
+COPY src/
 
 # Restore dependencies and build the project
 RUN dotnet restore
