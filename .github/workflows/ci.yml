@@ -19,4 +19,7 @@ jobs:
         run: dotnet restore ./src/LibraryApp.csproj
 
       - name: Build
-        run: dotnet build ./src/LibraryApp.csproj --no-restore
+        run: dotnet build ./src/LibraryApp.csproj --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./src/LibraryApp.csproj --no-build
