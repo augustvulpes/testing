@@ -1,12 +1,13 @@
 version: '3.8'
 
 services:
-  db:
+  postgres:
     image: postgres:latest
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: adminadmin
       POSTGRES_DB: library
+      PGPORT: 5432
     ports:
       - "5432:5432"
     networks:
@@ -19,7 +20,7 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - db
+      - postgres
     networks:
       - test_network
     ports:
