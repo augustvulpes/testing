@@ -10,7 +10,7 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                 .WithId(1)
                 .WithTitle("News One")
                 .WithDescription("Good news")
-                .WithCreationDate(DateTime.Today);
+                .WithCreationDate(DateTime.UtcNow);
         }
 
         public List<NewsBuilder> CreateRange()
@@ -21,12 +21,12 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                     .WithId(1)
                     .WithTitle("News One")
                     .WithDescription("Good news")
-                    .WithCreationDate(DateTime.Today),
+                    .WithCreationDate(DateTime.UtcNow),
                 new NewsBuilder()
                     .WithId(2)
                     .WithTitle("News Two")
                     .WithDescription("Another good news")
-                    .WithCreationDate(DateTime.Today)
+                    .WithCreationDate(DateTime.UtcNow)
             };
         }
     }

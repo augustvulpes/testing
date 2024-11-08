@@ -10,7 +10,7 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                 .WithId(1)
                 .WithTitle("Collection One")
                 .WithDescription("Decent collection")
-                .WithCreationDate(DateTime.Today);
+                .WithCreationDate(DateTime.UtcNow);
         }
 
         public List<CollectionBuilder> CreateRange()
@@ -21,12 +21,12 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                     .WithId(1)
                     .WithTitle("Collection One")
                     .WithDescription("Decent collection")
-                    .WithCreationDate(DateTime.Today),
+                    .WithCreationDate(DateTime.UtcNow),
                 new CollectionBuilder()
                     .WithId(2)
                     .WithTitle("Collection Two")
                     .WithDescription("Another decent collection")
-                    .WithCreationDate(DateTime.Today)
+                    .WithCreationDate(DateTime.UtcNow)
             };
         }
     }

@@ -11,7 +11,7 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                     .WithBookId(1)
                     .WithUserId("1")
                     .WithState("new")
-                    .WithCreationDate(DateTime.Today);
+                    .WithCreationDate(DateTime.UtcNow);
         }
 
         public List<OrderBuilder> CreateRange()
@@ -23,13 +23,13 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                     .WithBookId(1)
                     .WithUserId("1")
                     .WithState("new")
-                    .WithCreationDate(DateTime.Today),
+                    .WithCreationDate(DateTime.UtcNow),
                 new OrderBuilder()
                     .WithId(2)
                     .WithBookId(2)
                     .WithUserId("2")
                     .WithState("new")
-                    .WithCreationDate(DateTime.Today)
+                    .WithCreationDate(DateTime.UtcNow)
             };
         }
     }

@@ -11,7 +11,7 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                 .WithBookId(1)
                 .WithUserId("1")
                 .WithContent("Review content one")
-                .WithCreationDate(DateTime.Today);
+                .WithCreationDate(DateTime.UtcNow);
         }
 
         public List<ReviewBuilder> CreateRange()
@@ -23,13 +23,13 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                     .WithBookId(1)
                     .WithUserId("1")
                     .WithContent("Review content one")
-                    .WithCreationDate(DateTime.Today),
+                    .WithCreationDate(DateTime.UtcNow),
                 new ReviewBuilder()
                     .WithId(2)
                     .WithBookId(2)
                     .WithUserId("2")
                     .WithContent("Review content two")
-                    .WithCreationDate(DateTime.Today)
+                    .WithCreationDate(DateTime.UtcNow)
             };
         }
     }

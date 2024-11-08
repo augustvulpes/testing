@@ -6,12 +6,12 @@ using Xunit;
 namespace LibraryApp.Tests.Integration.Tests
 {
     [Collection(nameof(NonParallelCollection))]
-    public class CollectionsIntegTests
+    public class NewsIntegTests
     {
         private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
         private readonly DataContext dbContext;
 
-        public CollectionsIntegTests()
+        public NewsIntegTests()
         {
             dbContext = DbHelper.GetContext();
             DbHelper.ClearDb();
@@ -22,11 +22,11 @@ namespace LibraryApp.Tests.Integration.Tests
         {
             Skip.If(skip);
 
-            var builder = new CollectionOM().CreateCollection();
-            var collection = builder.buildDto();
+            var builder = new NewsOM().CreateNews();
+            var news = builder.buildDto();
 
-            var collectionsService = DbHelper.GetRequiredService<CollectionService>();
-            var result = collectionsService.CreateCollection(collection);
+            var newsService = DbHelper.GetRequiredService<NewsService>();
+            var result = newsService.CreateNews(news);
 
             DbHelper.ClearDb();
 
