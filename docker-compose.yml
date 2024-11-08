@@ -7,13 +7,12 @@ services:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: adminadmin
       POSTGRES_DB: library
-      POSTGRES_MAX_CONNECTIONS: 200
     ports:
       - "5432:5432"
     networks:
       - test_network
     volumes:
-      - ./initDB.sql
+      - ./initDB.sql:/docker-entrypoint-initdb.d/initDB.sql
 
   app:
     build:
