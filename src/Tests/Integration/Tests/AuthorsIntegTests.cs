@@ -17,21 +17,21 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
         }
 
-        //[SkippableFact]
-        //public void TestAdd()
-        //{
-        //    Skip.If(skip);
+        [SkippableFact]
+        public void TestAdd()
+        {
+            Skip.If(skip);
 
-        //    var builder = new AuthorOM().CreateAuthor();
-        //    var author = builder.buildDto();
+            var builder = new AuthorOM().CreateAuthor();
+            var author = builder.buildDto();
 
-        //    var authorsService = DbHelper.GetRequiredService<AuthorService>();
-        //    var result = authorsService.CreateAuthor(author);
+            var authorsService = DbHelper.GetRequiredService<AuthorService>();
+            var result = authorsService.CreateAuthor(author);
 
-        //    DbHelper.ClearDb();
+            DbHelper.ClearDb();
 
-        //    Assert.Equivalent("Successfully created", result);
-        //}
+            Assert.Equivalent("Successfully created", result);
+        }
 
         //[SkippableFact]
         //public void UpdateAuthor()

@@ -16,25 +16,25 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
         }
 
-        //[SkippableFact]
-        //public void TestAdd()
-        //{
-        //    Skip.If(skip);
+        [SkippableFact]
+        public void TestAdd()
+        {
+            Skip.If(skip);
 
-        //    var builder = new BookOM().CreateBook();
-        //    var book = builder.buildDto();
-        //    var builderAuthor = new AuthorOM().CreateAuthor();
-        //    var author = builderAuthor.buildDto();
+            var builder = new BookOM().CreateBook();
+            var book = builder.buildDto();
+            var builderAuthor = new AuthorOM().CreateAuthor();
+            var author = builderAuthor.buildDto();
 
-        //    var authorsService = DbHelper.GetRequiredService<AuthorService>();
-        //    var result = authorsService.CreateAuthor(author);
+            var authorsService = DbHelper.GetRequiredService<AuthorService>();
+            var result = authorsService.CreateAuthor(author);
 
-        //    var bookService = DbHelper.GetRequiredService<BookService>();
-        //    var created = bookService.CreateBook(author.Id, book);
+            var bookService = DbHelper.GetRequiredService<BookService>();
+            var created = bookService.CreateBook(author.Id, book);
 
-        //    DbHelper.ClearDb();
+            DbHelper.ClearDb();
 
-        //    Assert.Equivalent("Successfully created", created);
-        //}
+            Assert.Equivalent("Successfully created", created);
+        }
     }
 }

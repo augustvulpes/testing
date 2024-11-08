@@ -1,17 +1,6 @@
 version: '3.8'
 
 services:
-  app:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    depends_on:
-      - db
-    networks:
-      - test_network
-    ports:
-      - "5000:5000"
-
   db:
     image: postgres:latest
     environment:
@@ -23,6 +12,19 @@ services:
       - "5432:5432"
     networks:
       - test_network
+    volumes:
+      - ./initDB.sql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    networks:
+      - test_network
+    ports:
+      - "5000:5000"
 
 networks:
   test_network:
