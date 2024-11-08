@@ -38,13 +38,13 @@ namespace LibraryApp.Tests.E2E
                 factory.CreateLogger<CollectionController>()
             );
 
-            dbContext = DbHelperE2E.GetContext();
-            DbHelperE2E.ClearDb();
+            dbContext = DbHelper.GetContext();
+            DbHelper.ClearDb();
         }
 
         ~E2ETests() 
         {
-            DbHelperE2E.ClearDb();
+            DbHelper.ClearDb();
         }
 
         [SkippableFact]
@@ -60,7 +60,7 @@ namespace LibraryApp.Tests.E2E
             var resultAuthor = authorController.CreateAuthor(author);
             var resultBook = bookController.CreateBook(author.Id, book) as OkObjectResult;
 
-            DbHelperE2E.ClearDb();
+            DbHelper.ClearDb();
 
             Assert.IsType<OkObjectResult>(resultBook);
             Assert.Equivalent(HttpStatusCode.OK, resultBook.StatusCode);
@@ -88,7 +88,7 @@ namespace LibraryApp.Tests.E2E
             var resultCollection = collectionController.CreateCollection(collection);
             var result = bookController.AddIntoCollection(collection.Id, book.Id) as OkObjectResult;
 
-            DbHelperE2E.ClearDb();
+            DbHelper.ClearDb();
 
             Assert.IsType<OkObjectResult>(result);
             Assert.Equivalent(HttpStatusCode.OK, result.StatusCode);
