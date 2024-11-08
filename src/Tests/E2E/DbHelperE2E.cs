@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace LibraryApp.Tests.Integration.Tests
 {
-    public class DbHelper
+    public class DbHelperE2E
     {
         // Для деплоя в контейнер и CD/CD
         private readonly static string connectionString = "Server=postgres; Database=library; User ID=postgres; Password=adminadmin";
