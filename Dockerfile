@@ -13,16 +13,3 @@ RUN dotnet build --configuration Release --no-restore
 
 # Запускаем тесты
 ENTRYPOINT ["dotnet", "test"]
-
-# # Set working directory inside the container
-# WORKDIR /app
-
-# # Copy everything to the container
-# COPY . .
-
-# # Restore dependencies and build the project
-# RUN dotnet restore ./src/LibraryApp.csproj
-# RUN dotnet build ./src/LibraryApp.csproj --no-restore
-
-# # Run tests
-# Run dotnet test ./src/LibraryApp.csproj --no-build

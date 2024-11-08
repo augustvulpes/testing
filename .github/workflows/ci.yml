@@ -15,17 +15,5 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
-      # - name: Dockerfile run
-      #   run: docker build -t augustvulpes/libraryapp .
-
       - name: Docker run 
         run: docker compose up --abort-on-container-exit
-
-      # - name: Install dependencies
-      #   run: dotnet restore ./src/LibraryApp.csproj
-
-      # - name: Build
-      #   run: dotnet build ./src/LibraryApp.csproj --configuration Release --no-restore
-
-      # - name: Test
-      #   run: dotnet test ./src/LibraryApp.csproj --no-build
