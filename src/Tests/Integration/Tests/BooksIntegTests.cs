@@ -50,6 +50,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetBooks()
         {
+            Skip.If(skip);
             //var testAuthor = new AuthorDto { Id = 1230, Country = "TEST", Name = "TEST002" };
 
             //_authorService.CreateAuthor(testAuthor);

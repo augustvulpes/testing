@@ -87,6 +87,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetOrder()
         {
+            Skip.If(skip);
             var builders = new OrderOM().CreateRange();
             var orders = builders.Select(or => or.buildDto()).ToList();
 

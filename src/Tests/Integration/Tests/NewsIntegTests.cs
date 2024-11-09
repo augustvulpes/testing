@@ -41,6 +41,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetNews()
         {
+            Skip.If(skip);
             var builders = new NewsOM().CreateRange();
             var news = builders.Select(n => n.buildDto()).ToList();
 

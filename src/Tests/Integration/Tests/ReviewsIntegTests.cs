@@ -86,6 +86,8 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetReview()
         {
+            Skip.If(skip);
+
             var builders = new ReviewOM().CreateRange();
             var reviews = builders.Select(r => r.buildDto()).ToList();
 

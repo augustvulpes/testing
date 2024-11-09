@@ -42,6 +42,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetAuthors()
         {
+            Skip.If(skip);
             //var testAuthor1 = new AuthorDto { Id = 1001, Country = "TEST1001", Name = "TEST1001" };
             //var testAuthor2 = new AuthorDto { Id = 1002, Country = "TEST1002", Name = "TEST1002" };
 

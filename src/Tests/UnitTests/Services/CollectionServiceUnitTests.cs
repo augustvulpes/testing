@@ -48,6 +48,7 @@ namespace LibraryApp.Tests.UnitTests.Services
             var resultCollections = _mapper.Map<List<Collection>>(_collectionService.GetCollections());
 
             Assert.Equivalent(collections, resultCollections);
+            //Assert.Equivalent(collections, builders);
         }
 
         [Fact]
