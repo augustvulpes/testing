@@ -8,8 +8,8 @@ EXPOSE 5000
 # Копируем .csproj файл и устанавливаем зависимости
 COPY ./src/ .
 RUN dotnet restore
-RUN dotnet build --configuration Release --no-restore
+RUN dotnet build --no-restore
 
 
 # Запускаем тесты
-ENTRYPOINT ["dotnet", "test"]
+ENTRYPOINT ["dotnet", "test", "-- RunConfiguration.ReporterSwitch=allure"]
