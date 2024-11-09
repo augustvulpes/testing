@@ -1,4 +1,5 @@
 ﻿using LibraryApp.Data;
+using LibraryApp.Models;
 using LibraryApp.Services;
 using LibraryApp.Tests.TestsHelpers.ObjectMothers;
 using Xunit;
@@ -14,6 +15,11 @@ namespace LibraryApp.Tests.Integration.Tests
         public AuthorsIntegTests()
         {
             dbContext = DbHelper.GetContext();
+            DbHelper.ClearDb();
+        }
+
+        ~AuthorsIntegTests()
+        {
             DbHelper.ClearDb();
         }
 
@@ -33,8 +39,33 @@ namespace LibraryApp.Tests.Integration.Tests
             Assert.Equivalent("Successfully created", result);
         }
 
+        [SkippableFact]
+        public void GetAuthors()
+        {
+            //var testAuthor1 = new AuthorDto { Id = 1001, Country = "TEST1001", Name = "TEST1001" };
+            //var testAuthor2 = new AuthorDto { Id = 1002, Country = "TEST1002", Name = "TEST1002" };
+
+            var builders = new AuthorOM().CreateRange();
+            var authors = builders.Select(a => a.buildDto()).ToList();
+
+            // var authors = new List<AuthorDto> { testAuthor1, testAuthor2 };
+
+            //_authorService.CreateAuthor(testAuthor1);
+            //_authorService.CreateAuthor(testAuthor2);
+
+            var authorsService = DbHelper.GetRequiredService<AuthorService>();
+            authorsService.CreateAuthor(authors[0]);
+            authorsService.CreateAuthor(authors[1]);
+
+            var resultAuthors = authorsService.GetAuthors();
+
+            DbHelper.ClearDb();
+
+            Assert.Equivalent(authors, resultAuthors);
+        }
+
         //[SkippableFact]
-        //public void UpdateAuthor()
+        //public void GetAuthor()
         //{
         //    Skip.If(skip);
 
@@ -47,7 +78,6 @@ namespace LibraryApp.Tests.Integration.Tests
 
         //    var authorsService = DbHelper.GetRequiredService<AuthorService>();
         //    author.Name = "New Name";
-        //    dbContext.Update(author);
         //    DbHelper.ClearDb();
 
         //    //Assert.Equivalent("Successfully updated", result);

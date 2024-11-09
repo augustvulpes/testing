@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using LibraryApp.Data;
+using LibraryApp.Dto;
 using LibraryApp.Helper;
 using LibraryApp.Interfaces.RepositoryInterfaces;
 using LibraryApp.Interfaces.ServiceInterfaces;
@@ -53,6 +54,11 @@ namespace LibraryApp.Tests.Integration.Tests
                 _mapper);
         }
 
+        ~OrdersIntegTests()
+        {
+            DbHelper.ClearDb();
+        }
+
         [SkippableFact]
         public void TestAdd()
         {
@@ -76,6 +82,35 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
 
             Assert.Equivalent("Successfully created", result);
+        }
+
+        [SkippableFact]
+        public void GetOrder()
+        {
+            var builders = new OrderOM().CreateRange();
+            var orders = builders.Select(or => or.buildDto()).ToList();
+
+            var bookBuilder = new BookOM().CreateBook();
+            var book = bookBuilder.build();
+
+            var userBuilder = new UserOM().CreateUser();
+            var user = userBuilder.build();
+
+            dbContext.Books.Add(book);
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+
+            //var orders = new List<OrderDto> { testOrder1, testOrder2 };
+
+            //_orderService.CreateOrder(orders[0]);
+            _orderService.CreateOrder(orders[1]);
+
+            var resultOrders = _orderService.GetAllOrders();
+
+            //_orderService.DeleteOrder(testOrder1.Id);
+            //_orderService.DeleteOrder(testOrder2.Id);
+
+            Assert.Equivalent(orders[1], resultOrders[0]);
         }
     }
 }

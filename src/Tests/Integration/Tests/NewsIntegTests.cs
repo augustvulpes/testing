@@ -17,6 +17,11 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
         }
 
+        ~NewsIntegTests()
+        {
+            DbHelper.ClearDb();
+        }
+
         [SkippableFact]
         public void TestAdd()
         {
@@ -31,6 +36,23 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
 
             Assert.Equivalent("Successfully created", result);
+        }
+
+        [SkippableFact]
+        public void GetNews()
+        {
+            var builders = new NewsOM().CreateRange();
+            var news = builders.Select(n => n.buildDto()).ToList();
+
+            var newsService = DbHelper.GetRequiredService<NewsService>();
+            newsService.CreateNews(news[0]);
+            newsService.CreateNews(news[1]);
+
+            var resultNews = newsService.GetNews();
+
+            DbHelper.ClearDb();
+
+            Assert.Equivalent(news, resultNews);
         }
     }
 }

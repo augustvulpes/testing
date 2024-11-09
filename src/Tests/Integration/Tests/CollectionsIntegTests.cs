@@ -1,4 +1,6 @@
 ﻿using LibraryApp.Data;
+using LibraryApp.Dto;
+using LibraryApp.Interfaces.ServiceInterfaces;
 using LibraryApp.Services;
 using LibraryApp.Tests.TestsHelpers.ObjectMothers;
 using Xunit;
@@ -17,6 +19,11 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
         }
 
+        ~CollectionsIntegTests()
+        {
+            DbHelper.ClearDb();
+        }
+
         [SkippableFact]
         public void TestAdd()
         {
@@ -31,6 +38,30 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
 
             Assert.Equivalent("Successfully created", result);
+        }
+
+        [SkippableFact]
+        public void GetCollections()
+        {
+            //var testCollection1 = new CollectionDto { Id = 9990, Title = "TEST1", CreationDate = DateTime.UtcNow, Description = "TEST" };
+            //var testCollection2 = new CollectionDto { Id = 9991, Title = "TEST2", CreationDate = DateTime.UtcNow, Description = "TEST" };
+            var builders = new CollectionOM().CreateRange();
+            var collections = builders.Select(c => c.buildDto()).ToList();
+
+            //var collections = new List<CollectionDto> { testCollection1, testCollection2 };
+            //_collectionService.CreateCollection(testCollection1);
+            //_collectionService.CreateCollection(testCollection2);
+            var collectionsService = DbHelper.GetRequiredService<CollectionService>();
+            collectionsService.CreateCollection(collections[0]);
+            collectionsService.CreateCollection(collections[1]);
+
+            var resultCollections = collectionsService.GetCollections();
+
+            //_collectionService.DeleteCollection(testCollection1.Id);
+            //_collectionService.DeleteCollection(testCollection2.Id);
+            DbHelper.ClearDb();
+
+            Assert.Equivalent(collections, resultCollections);
         }
     }
 }

@@ -58,12 +58,12 @@ namespace LibraryApp.Tests.E2E
             var author = builderAuthor.buildDto();
 
             var resultAuthor = authorController.CreateAuthor(author);
-            var resultBook = bookController.CreateBook(author.Id, book) as OkObjectResult;
+            var resultBook = bookController.CreateBook(author.Id, book);
 
             DbHelper.ClearDb();
 
             Assert.IsType<OkObjectResult>(resultBook);
-            Assert.Equivalent(HttpStatusCode.OK, resultBook.StatusCode);
+            Assert.Equivalent(HttpStatusCode.OK, (resultBook as OkObjectResult).StatusCode);
         }
 
         [SkippableFact]
@@ -86,12 +86,12 @@ namespace LibraryApp.Tests.E2E
             dbContext.Books.Add(book);
             dbContext.SaveChanges();
             var resultCollection = collectionController.CreateCollection(collection);
-            var result = bookController.AddIntoCollection(collection.Id, book.Id) as OkObjectResult;
+            var result = bookController.AddIntoCollection(collection.Id, book.Id);
 
             DbHelper.ClearDb();
 
             Assert.IsType<OkObjectResult>(result);
-            Assert.Equivalent(HttpStatusCode.OK, result.StatusCode);
+            Assert.Equivalent(HttpStatusCode.OK, (result as OkObjectResult).StatusCode);
         }
 
         //[SkippableFact]

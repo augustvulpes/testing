@@ -53,6 +53,11 @@ namespace LibraryApp.Tests.Integration.Tests
                 _mapper);
         }
 
+        ~ReviewsIntegTests()
+        {
+            DbHelper.ClearDb();
+        }
+
         [SkippableFact]
         public void TestAdd()
         {
@@ -76,6 +81,35 @@ namespace LibraryApp.Tests.Integration.Tests
             DbHelper.ClearDb();
 
             Assert.Equivalent("Successfully created", result);
+        }
+
+        [SkippableFact]
+        public void GetReview()
+        {
+            var builders = new ReviewOM().CreateRange();
+            var reviews = builders.Select(r => r.buildDto()).ToList();
+
+            var bookBuilder = new BookOM().CreateBook();
+            var book = bookBuilder.build();
+
+            var userBuilder = new UserOM().CreateUser();
+            var user = userBuilder.build();
+
+            dbContext.Books.Add(book);
+            dbContext.Users.Add(user);
+            dbContext.SaveChanges();
+
+            //var reviews = new List<ReviewDto> { testReview1, testReview2 };
+
+            //_reviewService.CreateReview(reviews[0]);
+            _reviewService.CreateReview(reviews[1]);
+
+            var resultReviews = _reviewService.GetReviews();
+
+            //_reviewService.DeleteReview(testReview1.Id);
+            //_reviewService.DeleteReview(testReview2.Id);
+
+            Assert.Equivalent(reviews[1], resultReviews[0]);
         }
     }
 }

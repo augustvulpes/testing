@@ -26,8 +26,8 @@ namespace LibraryApp.Tests.TestsHelpers.ObjectMothers
                     .WithCreationDate(DateTime.UtcNow),
                 new ReviewBuilder()
                     .WithId(2)
-                    .WithBookId(2)
-                    .WithUserId("2")
+                    .WithBookId(1)
+                    .WithUserId("1")
                     .WithContent("Review content two")
                     .WithCreationDate(DateTime.UtcNow)
             };
