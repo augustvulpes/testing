@@ -50,7 +50,6 @@ namespace LibraryApp.Tests.UnitTests.Services
             Assert.Equivalent(authors, resultAuthors);
             // ФЕЙЛИМСЯ СПЕЦИАЛЬНО
             Assert.Equivalent(authors, builders);
-            Environment.SetEnvironmentVariable("skip", "true");
         }
 
         [Fact]

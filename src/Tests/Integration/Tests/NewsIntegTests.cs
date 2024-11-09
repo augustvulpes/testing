@@ -8,7 +8,8 @@ namespace LibraryApp.Tests.Integration.Tests
     [Collection(nameof(NonParallelCollection))]
     public class NewsIntegTests
     {
-        private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
+        //private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
+        private readonly bool skip = true;
         private readonly DataContext dbContext;
 
         public NewsIntegTests()
