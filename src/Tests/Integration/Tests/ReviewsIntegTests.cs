@@ -61,7 +61,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void TestAdd()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new ReviewOM().CreateReview();
             var review = builder.buildDto();
@@ -86,7 +86,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetReview()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builders = new ReviewOM().CreateRange();
             var reviews = builders.Select(r => r.buildDto()).ToList();

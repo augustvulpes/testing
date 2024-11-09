@@ -50,7 +50,7 @@ namespace LibraryApp.Tests.E2E
         [SkippableFact]
         public void createAuthorAndBook()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new BookOM().CreateBook();
             var book = builder.buildDto();
@@ -69,7 +69,7 @@ namespace LibraryApp.Tests.E2E
         [SkippableFact]
         public void addBookIntoCollection()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new BookOM().CreateBook();
             var book = builder.build();

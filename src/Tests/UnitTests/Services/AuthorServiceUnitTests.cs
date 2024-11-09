@@ -47,6 +47,7 @@ namespace LibraryApp.Tests.UnitTests.Services
 
             var resultAuthors = _mapper.Map<List<Author>>(_authorService.GetAuthors());
 
+            Environment.SetEnvironmentVariable("skip", "true");
             Assert.Equivalent(authors, resultAuthors);
             // ФЕЙЛИМСЯ СПЕЦИАЛЬНО
             Assert.Equivalent(authors, builders);

@@ -25,7 +25,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void TestAdd()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new NewsOM().CreateNews();
             var news = builder.buildDto();
@@ -41,7 +41,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetNews()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
             var builders = new NewsOM().CreateRange();
             var news = builders.Select(n => n.buildDto()).ToList();
 

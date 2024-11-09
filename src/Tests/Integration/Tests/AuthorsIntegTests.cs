@@ -26,7 +26,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void TestAdd()
         {
-            Skip.If(true);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new AuthorOM().CreateAuthor();
             var author = builder.buildDto();
@@ -42,7 +42,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetAuthors()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
             //var testAuthor1 = new AuthorDto { Id = 1001, Country = "TEST1001", Name = "TEST1001" };
             //var testAuthor2 = new AuthorDto { Id = 1002, Country = "TEST1002", Name = "TEST1002" };
 

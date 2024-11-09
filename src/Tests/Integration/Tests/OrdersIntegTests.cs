@@ -62,7 +62,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void TestAdd()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new OrderOM().CreateOrder();
             var order = builder.buildDto();
@@ -87,7 +87,8 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetOrder()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
+
             var builders = new OrderOM().CreateRange();
             var orders = builders.Select(or => or.buildDto()).ToList();
 

@@ -27,7 +27,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void TestAdd()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
 
             var builder = new CollectionOM().CreateCollection();
             var collection = builder.buildDto();
@@ -43,7 +43,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void GetCollections()
         {
-            Skip.If(skip);
+            Skip.If(Environment.GetEnvironmentVariable("skip") == "true");
             //var testCollection1 = new CollectionDto { Id = 9990, Title = "TEST1", CreationDate = DateTime.UtcNow, Description = "TEST" };
             //var testCollection2 = new CollectionDto { Id = 9991, Title = "TEST2", CreationDate = DateTime.UtcNow, Description = "TEST" };
             var builders = new CollectionOM().CreateRange();
