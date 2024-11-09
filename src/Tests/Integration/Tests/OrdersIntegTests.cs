@@ -15,8 +15,7 @@ namespace LibraryApp.Tests.Integration.Tests
     [Collection(nameof(NonParallelCollection))]
     public class OrdersIntegTests
     {
-        //private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
-        private readonly bool skip = true;
+        private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
         private readonly DataContext dbContext;
 
         private readonly IOrderService _orderService;

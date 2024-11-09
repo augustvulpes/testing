@@ -15,8 +15,7 @@ namespace LibraryApp.Tests.E2E
     [Collection(nameof(NonParallelCollection))]
     public class E2ETests
     {
-        //private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
-        private readonly bool skip = true;
+        private readonly bool skip = Environment.GetEnvironmentVariable("skip") == "true";
         private readonly DataContext dbContext;
         private readonly BookController bookController;
         private readonly AuthorController authorController;
