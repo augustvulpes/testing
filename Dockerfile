@@ -13,4 +13,3 @@ RUN dotnet build --configuration Release --no-restore
 
 # Запускаем тесты
 ENTRYPOINT ["dotnet", "test"]
-RUN allure generate
