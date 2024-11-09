@@ -31,7 +31,7 @@ jobs:
         if: always()
         with:
           gh_pages: gh-pages
-          allure_results: ./src/bin/Release/net8.0
+          allure_results: ./src/bin/Release/net8.0/allure-results
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
