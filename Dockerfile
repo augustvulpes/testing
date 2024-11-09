@@ -12,4 +12,4 @@ RUN dotnet build --configuration Release --no-restore
 
 
 # Запускаем тесты
-ENTRYPOINT ["dotnet", "test", "--RunConfiguration.ReporterSwitch=allure"]
+ENTRYPOINT ["dotnet", "test"]
