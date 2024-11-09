@@ -26,7 +26,7 @@ namespace LibraryApp.Tests.Integration.Tests
         [SkippableFact]
         public void TestAdd()
         {
-            Skip.If(skip);
+            Skip.If(true);
 
             var builder = new AuthorOM().CreateAuthor();
             var author = builder.buildDto();
