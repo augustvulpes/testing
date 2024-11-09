@@ -32,7 +32,7 @@ jobs:
         with:
           gh_pages: gh-pages
           #allure_results: ./src/bin/Release/net8.0/allure-results
-          allure_results: build/allure-results
+          allure_results: /app/bin/Release/net8.0/allure-results
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
