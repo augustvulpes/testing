@@ -30,15 +30,6 @@ services:
     volumes:
       - ./allure-results:/app/bin/Release/net8.0/allure-results
 
-  debug:
-    build:
-      context: .
-      dockerfile: DockerfileDebug
-    depends_on:
-      - app
-    volumes:
-      - ./bin:/app/bin
-
 networks:
   test_network:
     driver: bridge
