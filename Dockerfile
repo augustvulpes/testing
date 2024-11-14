@@ -12,4 +12,4 @@ RUN dotnet build --configuration Release --no-restore
 RUN ls
 
 # Запускаем тесты
-ENTRYPOINT ["dotnet", "test && ls"]
+ENTRYPOINT ["dotnet test && ls"]
