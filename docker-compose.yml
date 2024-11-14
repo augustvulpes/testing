@@ -16,6 +16,7 @@ services:
       - test_network
     volumes:
       - ./initDB.sql:/docker-entrypoint-initdb.d/initDB.sql
+    command: ls src
 
   app:
     build:

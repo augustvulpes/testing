@@ -16,10 +16,13 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Docker run 
-        run: docker compose up --abort-on-container-exit
+        run: docker compose up
 
       - name: Copy results
         run: docker cp libapp:/app/src/bin/Release/net8.0/allure-results ./allure-results
+
+      - name: Docker Down
+        run: docker compose down
 
       - name: Load test report history
         uses: actions/checkout@v3
