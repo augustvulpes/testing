@@ -28,8 +28,16 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./allure-results:/src/bin/Release/net8.0/allure-results
-    command: ls src
+      - ./allure-results:/app/bin/Release/net8.0/allure-results
+      - ./containerBin:/app/bin
+    command: ls bin
+
+  debug:
+    depends_on:
+      - app
+    volumes:
+      - ./bin:/app/bin
+    command: ls bin
 
 networks:
   test_network:

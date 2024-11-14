@@ -16,7 +16,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Docker run 
-        run: docker compose up -d
+        run: docker compose up --abort-on-container-exit
 
       - name: Copy results
         run: docker cp libapp-app-1:/app/bin/Release/net8.0/allure-results ./allure-results
