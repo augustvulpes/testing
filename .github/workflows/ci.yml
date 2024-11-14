@@ -47,6 +47,3 @@ jobs:
           github_token: ${{ secrets.TOKEN }}
           publish_branch: gh-pages
           publish_dir: allure-history
-
-      - name: Content
-        run: ls

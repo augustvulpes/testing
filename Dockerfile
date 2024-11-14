@@ -9,7 +9,6 @@ EXPOSE 5000
 COPY ./src/ .
 RUN dotnet restore
 RUN dotnet build --configuration Release --no-restore
-RUN ls
 
 # Запускаем тесты
 ENTRYPOINT ["dotnet", "test"]
