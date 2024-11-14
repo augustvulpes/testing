@@ -7,9 +7,10 @@ EXPOSE 5000
 
 # Копируем .csproj файл и устанавливаем зависимости
 COPY ./src .
-RUN dotnet restore
-RUN dotnet build --configuration Release --no-restore
-RUN ls
+# RUN dotnet add package Allure.Xunit
+# RUN dotnet restore
+RUN dotnet add package Allure.Xunit
+RUN dotnet build
 
 RUN ["chmod", "+x", "./entrypoint.sh"]
 # Запускаем тесты
