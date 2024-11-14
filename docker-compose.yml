@@ -28,7 +28,7 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./allure-results:/app/bin/Release/net8.0/allure-results
+      - ./allure-results:/bin/Release/net8.0/allure-results
 
 networks:
   test_network:
