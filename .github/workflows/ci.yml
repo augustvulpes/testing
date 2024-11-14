@@ -23,6 +23,11 @@ jobs:
         if: always()
         continue-on-error: true
 
+      - name: LS allure
+        run: ls ./allure-results
+        if: always()
+        continue-on-error: true
+
       - name: Docker Down
         run: docker compose down
 
