@@ -34,7 +34,7 @@ jobs:
         continue-on-error: true
 
       - name: LS
-        run: ls
+        run: ls ./src
         if: always()
         continue-on-error: true
 
