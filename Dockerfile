@@ -11,7 +11,9 @@ RUN dotnet restore ./src/LibraryApp.csproj
 RUN dotnet build ./src/LibraryApp.csproj --configuration Release --no-restore
 RUN ls
 
-# Запускаем тесты
-ENTRYPOINT ["dotnet", "test", "./src/LibraryApp.csproj"]
+RUN dotnet test ./src/LibraryApp.csproj
 
-RUN ls
+# # Запускаем тесты
+# ENTRYPOINT ["dotnet", "test", "./src/LibraryApp.csproj"]
+
+RUN ls src
