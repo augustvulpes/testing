@@ -12,4 +12,4 @@ RUN dotnet build --configuration Release --no-restore
 RUN ls
 
 # Запускаем тесты
-ENTRYPOINT ["./app/entrypoint.sh"]
+ENTRYPOINT ["./entrypoint.sh"]
