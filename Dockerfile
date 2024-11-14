@@ -6,9 +6,9 @@ WORKDIR /app
 EXPOSE 5000
 
 # Копируем .csproj файл и устанавливаем зависимости
-COPY ./src/ .
-RUN dotnet restore
-RUN dotnet build --configuration Release --no-restore
+COPY . .
+RUN dotnet restore ./src/LibraryApp.csproj
+RUN dotnet build ./src/LibraryApp.csproj --configuration Release --no-restore
 
 # Запускаем тесты
-ENTRYPOINT ["dotnet", "test"]
+ENTRYPOINT ["dotnet", "test", "./src/LibraryApp.csproj"]

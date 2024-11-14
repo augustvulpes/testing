@@ -32,7 +32,7 @@ jobs:
         with:
           gh_pages: gh-pages
           #allure_results: ./src/bin/Release/net8.0/allure-results
-          allure_results: ./allure-results
+          allure_results: allure-results
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
@@ -40,7 +40,7 @@ jobs:
         with:
           github_token: ${{ secrets.TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./allure-results
+          publish_dir: allure-history
 
       - name: Content
         run: ls
