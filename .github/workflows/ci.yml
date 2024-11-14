@@ -16,10 +16,10 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Docker run 
-        run: docker compose up
+        run: docker compose up -d
 
-      # - name: Copy results
-      #   run: docker cp libapp:/app/src/bin/Release/net8.0/allure-results ./allure-results
+      - name: Copy results
+        run: docker cp libapp-app-1:/app/bin/Release/net8.0/allure-results ./allure-results
 
       - name: Docker Down
         run: docker compose down
