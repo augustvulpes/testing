@@ -29,8 +29,6 @@ services:
       - "5000:5000"
     volumes:
       - ./allure-results:/app/bin/Release/net8.0/allure-results
-      - ./containerBin:/app/bin
-    command: ls bin
 
   # debug:
   #   depends_on:
