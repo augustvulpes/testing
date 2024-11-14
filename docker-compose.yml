@@ -36,7 +36,7 @@ volumes:
     driver: local
     driver_opts:
       type: none
-      o: bind:
+      o: bind
       device: ./allure-results
 
 networks:
