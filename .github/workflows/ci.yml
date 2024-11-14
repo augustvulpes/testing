@@ -18,8 +18,8 @@ jobs:
       - name: Docker run 
         run: docker compose up
 
-      - name: Copy results
-        run: docker cp libapp:/app/src/bin/Release/net8.0/allure-results ./allure-results
+      # - name: Copy results
+      #   run: docker cp libapp:/app/src/bin/Release/net8.0/allure-results ./allure-results
 
       - name: Docker Down
         run: docker compose down
