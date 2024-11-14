@@ -11,5 +11,6 @@ RUN dotnet restore
 RUN dotnet build --configuration Release --no-restore
 RUN ls
 
+RUN ["chmod", "+x", "./entrypoint.sh"]
 # Запускаем тесты
 ENTRYPOINT ["./entrypoint.sh"]
