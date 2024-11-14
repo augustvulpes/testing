@@ -1,0 +1,2 @@
+RUN ls
+ENTRYPOINT ["ls bin"]

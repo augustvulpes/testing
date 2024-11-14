@@ -20,6 +20,8 @@ jobs:
 
       - name: Copy results
         run: docker cp libapp-app-1:/app/bin/Release/net8.0/allure-results ./allure-results
+        if: always()
+        continue-on-error: true
 
       - name: Docker Down
         run: docker compose down
