@@ -18,7 +18,7 @@ jobs:
       - name: Docker run 
         run: | 
           mkdir -p ./allure-results
-          docker compose up --abort-on-container-exit
+          docker compose up -d
         if: always()
         continue-on-error: true
 
