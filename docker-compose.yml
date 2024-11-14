@@ -28,15 +28,15 @@ services:
     ports:
       - "5000:5000"
     volumes:
-      - ./allure-results:/bin/Debug/net8.0/allure-results
+      - allure-data:/bin/Debug/net8.0/allure-results
 
-# volumes:
-#   allure-data:
-#     driver: local
-#     driver_opts:
-#       type: none
-#       o: bind
-#       device: ./allure-results
+volumes:
+  allure-data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./allure-results
 
 networks:
   test_network:
