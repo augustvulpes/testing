@@ -32,7 +32,6 @@ services:
 
 volumes:
   allure-data:
-    external: true
     driver: local
     driver_opts:
       type: none
