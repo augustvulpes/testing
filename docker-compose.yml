@@ -16,7 +16,6 @@ services:
       - test_network
     volumes:
       - ./initDB.sql:/docker-entrypoint-initdb.d/initDB.sql
-    command: ls src
 
   app:
     build:
@@ -30,6 +29,7 @@ services:
       - "5000:5000"
     volumes:
       - ./allure-results:/src/bin/Release/net8.0/allure-results
+    command: ls src
 
 networks:
   test_network:
