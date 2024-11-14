@@ -32,12 +32,12 @@ services:
       - ./containerBin:/app/bin
     command: ls bin
 
-  debug:
-    depends_on:
-      - app
-    volumes:
-      - ./bin:/app/bin
-    command: ls bin
+  # debug:
+  #   depends_on:
+  #     - app
+  #   volumes:
+  #     - ./bin:/app/bin
+  #   command: ls bin
 
 networks:
   test_network:
