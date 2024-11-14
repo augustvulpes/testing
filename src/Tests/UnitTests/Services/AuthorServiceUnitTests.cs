@@ -9,6 +9,7 @@ using AutoMapper;
 using LibraryApp.Helper;
 using LibraryApp.Dto;
 using LibraryApp.Tests.TestsHelpers.ObjectMothers;
+using Allure.Net.Commons;
 
 namespace LibraryApp.Tests.UnitTests.Services
 {
