@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using Allure.Xunit.Attributes;
+using AutoMapper;
 using LibraryApp.Data;
 using LibraryApp.Dto;
 using LibraryApp.Helper;
@@ -12,6 +13,8 @@ using Xunit;
 
 namespace LibraryApp.Tests.Integration.Tests
 {
+    [AllureOwner("Maksim Rud")]
+    [AllureSuite("Orders Service Integ Test")]
     [Collection(nameof(NonParallelCollection))]
     public class OrdersIntegTests
     {

@@ -1,4 +1,5 @@
-﻿using LibraryApp.Controllers;
+﻿using Allure.Xunit.Attributes;
+using LibraryApp.Controllers;
 using LibraryApp.Data;
 using LibraryApp.Services;
 using LibraryApp.Tests.Integration.Tests;
@@ -12,6 +13,8 @@ using Xunit;
 
 namespace LibraryApp.Tests.E2E
 {
+    [AllureOwner("Maksim Rud")]
+    [AllureSuite("E2E Test")]
     [Collection(nameof(NonParallelCollection))]
     public class E2ETests
     {

@@ -1,4 +1,5 @@
-﻿using LibraryApp.Data;
+﻿using Allure.Xunit.Attributes;
+using LibraryApp.Data;
 using LibraryApp.Dto;
 using LibraryApp.Interfaces.ServiceInterfaces;
 using LibraryApp.Services;
@@ -7,6 +8,8 @@ using Xunit;
 
 namespace LibraryApp.Tests.Integration.Tests
 {
+    [AllureOwner("Maksim Rud")]
+    [AllureSuite("Books Service Integ Test")]
     [Collection(nameof(NonParallelCollection))]
     public class BooksIntegTests
     {

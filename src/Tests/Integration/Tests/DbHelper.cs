@@ -1,4 +1,5 @@
-﻿using LibraryApp.Data;
+﻿using Allure.Net.Commons;
+using LibraryApp.Data;
 using LibraryApp.Interfaces.RepositoryInterfaces;
 using LibraryApp.Repository;
 using LibraryApp.Services;
@@ -16,6 +17,12 @@ namespace LibraryApp.Tests.Integration.Tests
         private readonly static DataContext context = new DataContext(new DbContextOptionsBuilder<DataContext>()
                 .UseNpgsql(connectionString)
                 .Options);
+
+        //public DbHelper()
+        //{
+        //    AllureLifecycle.Instance.CleanupResultDirectory();
+        //    AllureLifecycle.Instance.ResultsDirectory = "allure-results";
+        //}
 
         private readonly static IHost host = new HostBuilder().ConfigureServices((hostContext, services) =>
         {
