@@ -18,21 +18,27 @@ jobs:
       - name: Docker run 
         run: docker compose up --abort-on-container-exit
 
-      # - name: Load test report history
-      #   uses: actions/checkout@v3
-      #   if: always()
-      #   continue-on-error: true
-      #   with:
-      #     ref: gh-pages
-      #     path: gh-pages
+      - name: Upload Allure results as artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: ./allure-results
+
+      - name: Load test report history
+        uses: actions/checkout@v3
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
 
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
           gh_pages: gh-pages
-          #allure_results: ./src/bin/Release/net8.0/allure-results
-          allure_results: ./allure-results
+          allure_history: allure-history
+          allure_results: allure-results
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
@@ -40,7 +46,7 @@ jobs:
         with:
           github_token: ${{ secrets.TOKEN }}
           publish_branch: gh-pages
-          publish_dir: ./allure-results
+          publish_dir: allure-history
 
       - name: Content
         run: ls
