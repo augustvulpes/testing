@@ -26,24 +26,13 @@ jobs:
       #     ref: gh-pages
       #     path: gh-pages
 
-      - name: Save App
-        uses: actions/upload-artifact@v4
-        with:
-          name: app
-          path: app
-
-      - name: Download App
-        uses: actions/download-artifact@v4
-        with:
-          name: app
-
       - name: Build test report
         uses: simple-elf/allure-report-action@v1.7
         if: always()
         with:
           gh_pages: gh-pages
           #allure_results: ./src/bin/Release/net8.0/allure-results
-          allure_results: app/bin/Release/net8.0/allure-results
+          allure_results: allure-results
 
       - name: Publish test report
         uses: peaceiris/actions-gh-pages@v3
