@@ -33,7 +33,7 @@ jobs:
           path: app
 
       - name: Download App
-        uses: actions/download-artifact@4
+        uses: actions/download-artifact@v4
         with:
           name: app
 
