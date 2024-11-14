@@ -18,6 +18,11 @@ jobs:
       - name: Docker run 
         run: docker compose up --abort-on-container-exit
 
+      - name: List files in workspace
+        run: |
+          echo "Listing files in the workspace after tests:"
+          ls -R
+
       - name: Load test report history
         uses: actions/checkout@v3
         if: always()
