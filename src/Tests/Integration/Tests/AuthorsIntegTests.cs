@@ -1,4 +1,5 @@
-﻿using LibraryApp.Data;
+﻿using Allure.Xunit.Attributes;
+using LibraryApp.Data;
 using LibraryApp.Models;
 using LibraryApp.Services;
 using LibraryApp.Tests.TestsHelpers.ObjectMothers;
@@ -6,6 +7,8 @@ using Xunit;
 
 namespace LibraryApp.Tests.Integration.Tests
 {
+    [AllureOwner("Maksim Rud")]
+    [AllureSuite("Author Service Integ Test")]
     [Collection(nameof(NonParallelCollection))]
     public class AuthorsIntegTests
     {
