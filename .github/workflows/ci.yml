@@ -19,8 +19,8 @@ jobs:
         run: | 
           mkdir -p ./allure-results
           docker compose up --abort-on-container-exit
-        if: always()
-        continue-on-error: true
+        # if: always()
+        # continue-on-error: true
 
       # - name: Copy results
       #   run: 
@@ -28,15 +28,15 @@ jobs:
       #   if: always()
       #   continue-on-error: true
 
-      - name: LS allure
-        run: ls ./allure-results
-        if: always()
-        continue-on-error: true
+      # - name: LS allure
+      #   run: ls ./allure-results
+      #   if: always()
+      #   continue-on-error: true
 
-      - name: LS
-        run: ls
-        if: always()
-        continue-on-error: true
+      # - name: LS
+      #   run: ls
+      #   if: always()
+      #   continue-on-error: true
 
       - name: Docker Down
         run: docker compose down
