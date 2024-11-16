@@ -12,7 +12,7 @@ COPY ./src .
 RUN dotnet add package Allure.Xunit
 RUN dotnet build
 
+ENTRYPOINT ["dotnet", "test"]
 # RUN ["chmod", "+x", "./entrypoint.sh"]
 # # Запускаем тесты
 # ENTRYPOINT ["./entrypoint.sh"]
-ENTRYPOINT ["dotnet", "test", "-- RunConfiguration.ReporterSwitch=allure"]
