@@ -1,4 +1,6 @@
 #!/bin/bash
+#sh -c ./ndepend/NDepend.Console.Core ./LibraryApp.ndproj /OutDir ndepend-output && grep -q 'Error' ndepend-output/NDependAnalysisResult.xml
+
 dotnet test LibraryApp.csproj -- RunConfiguration.ReporterSwitch=allure
 ls
 ls bin/

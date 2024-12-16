@@ -15,6 +15,16 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Build the project
+        run: dotnet build ./src/LibraryApp.csproj
+
+      - name: NDepend
+        uses: ndepend/ndepend-action@v1
+        with:
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}  
+          license: ${{ secrets.NDependLicense }}
+          customconfig: ./src/LibraryApp.ndproj
+
       - name: Docker run 
         run: | 
           mkdir -p ./allure-results
