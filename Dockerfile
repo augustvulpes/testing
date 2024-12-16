@@ -9,10 +9,10 @@ EXPOSE 5000
 COPY ./src .
 # RUN dotnet add package Allure.Xunit
 # RUN dotnet restore
-RUN dotnet add package Allure.Xunit
-RUN dotnet build
+RUN dotnet add LibraryApp.csproj package Allure.Xunit
+RUN dotnet build LibraryApp.csproj
 
-ENTRYPOINT ["dotnet", "test"]
+ENTRYPOINT ["dotnet", "test LibraryApp.csproj"]
 # RUN ["chmod", "+x", "./entrypoint.sh"]
 # # Запускаем тесты
 # ENTRYPOINT ["./entrypoint.sh"]
