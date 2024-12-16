@@ -88,8 +88,8 @@
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Percentage Coverage on Refactored Code$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Blocker Issues$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Critical Issues$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$New Blocker / Critical / High Issues$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Critical Rules Violated$]]></Query>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$New Blocker / Critical / High Issues$]]></Query>
+      <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Critical Rules Violated$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Treat Compiler Warnings as Error$]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Percentage Debt$]]></Query>
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Debt$]]></Query>
@@ -202,9 +202,342 @@
       <Query Active="False" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$Methods directly and indirectly called by test Methods$]]></Query>
     </Group>
     <Group Name="Dead Code" Active="True" ShownInReport="True">
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1700$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1701$]]></Query>
-      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1702$]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially Dead Types</Name>
+// <Id>ND1700:PotentiallyDeadTypes</Id>
+
+// <QualityGate Name="Critical Rules Violated" Unit="rules" />
+
+failif count > 0 rules
+// Filter procedure for types that shouldn't be considered as dead
+let canTypeBeConsideredAsDeadProc = new Func<IType, bool>(
+   t => !t.IsPublic && //   Public types might be used by client applications of your assemblies.
+         t.Name != "Program" && 
+        !t.IsGeneratedByCompiler &&
+        !t.IsUsedFromAssemblyAttributes &&
+
+         // If you don't want to link NDepend.API.dll, you can use your own 
+         // IsNotDeadCodeAttribute or UsedImplicitlyAttribute
+         // and adapt the source code of this rule.
+        !t.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+        !t.HasAttribute("JetBrains.Annotations.UsedImplicitlyAttribute".AllowNoMatch()) &&
+        !t.Methods.Any(m => m.HasAttribute("JetBrains.Annotations.UsedImplicitlyAttribute".AllowNoMatch())) &&
+        !t.Properties.Any(p => p.HasAttribute("JetBrains.Annotations.UsedImplicitlyAttribute".AllowNoMatch())) &&
+
+         // Exclude static types that define only const fields
+         // because they cannot be seen as used in IL code.
+        !(t.IsStatic && t.NbMethods == 0 && !t.Fields.Where(f => !f.IsLiteral).Any()) &&
+
+         // Entity Framework ModelSnapshot classes are used only by the EF infrastructure.
+        !t.DeriveFrom("Microsoft.EntityFrameworkCore.Infrastructure.ModelSnapshot".AllowNoMatch()) &&
+
+         // ASP.NET MVC Controller classes are used only by the infrastructure.
+        !t.SimpleName.EndsWith("Controller") &&
+        !t.DeriveFrom("Microsoft.AspNetCore.Mvc.Controller".AllowNoMatch()) &&
+        !t.DeriveFrom("Microsoft.AspNetCore.Mvc.ControllerBase".AllowNoMatch()) &&
+        !t.HasAttribute("Microsoft.AspNetCore.Mvc.ControllerAttribute".AllowNoMatch()) &&
+        
+        // Types used by the Unity engine
+        !t.HasAttribute("UnityEngine.RuntimeInitializeOnLoadAttribute".AllowNoMatch()) &&
+        !t.HasAttribute("UnityEngine.InitializeOnLoadAttribute".AllowNoMatch()) &&
+        !t.DeriveFrom("UnityEditor.AssetPostprocessor".AllowNoMatch()) &&
+        !(t.IsStatic && t.StaticMethods.Any(m => m.HasAttribute("UnityEditor.MenuItemAttribute".AllowNoMatch()))) &&
+        !t.Methods.Any(m => m.HasAttribute("UnityEngine.RuntimeInitializeOnLoadMethodAttribute".AllowNoMatch()) ||
+                             m.HasAttribute("UnityEngine.InitializeOnLoadMethodAttribute".AllowNoMatch()))
+)
+   
+// Select types unused
+let typesUnused = 
+   from t in JustMyCode.Types where
+   t.NbTypesUsingMe == 0 && canTypeBeConsideredAsDeadProc(t)
+   select t
+
+// Dead types = types used only by unused types (recursive)
+let deadTypesMetric = typesUnused.FillIterative(
+types => from t in codeBase.Application.Types.UsedByAny(types).Except(types)
+         where canTypeBeConsideredAsDeadProc(t) &&
+               t.TypesUsingMe.Intersect(types).Count() == t.NbTypesUsingMe
+         select t)
+
+from t in deadTypesMetric.DefinitionDomain
+select new { 
+   t, 
+   depth = deadTypesMetric[t],
+   t.TypesUsingMe, 
+   Debt = 15.ToMinutes().ToDebt(),
+   AnnualInterest = (10 + (t.NbLinesOfCode ?? 1)).ToMinutes().ToAnnualInterest()
+}
+
+//<Expl>
+// The *{0}* is not used within the context of analyzed code and may be a candidate for removal.
+//</Expl>
+
+//<Desc>
+// This rule lists *potentially* **dead types**.
+// A dead type is a type that can be removed
+// because it is never used by the program.
+//
+// This rule lists not only types not used anywhere in code,
+// but also types used only by types not used anywhere in code.
+// This is why this rule comes with a column *TypesusingMe* and
+// this is why there is a code metric named *depth*:
+//
+// • A *depth* value of *0* means the type is not used.
+//
+// • A *depth* value of *1* means the type is used only by types not used.
+//
+// • etc…
+//
+// By reading the source code of this rule, you'll see that by default,
+// *public* types are not matched, because such type might not be used
+// by the analyzed code, but still be used by client code, not analyzed by NDepend.
+// This default behavior can be easily changed.
+//
+// Note that this rule doesn't match Entity Framework ModelSnapshot classes
+// that are used ony by the EF infrastructure.
+//</Desc>
+
+//<HowToFix>
+// *Static analysis* cannot provide an *exact* list of dead types,
+// because there are several ways to use a type *dynamically* (like through reflection).
+//
+// For each type matched by this query, first investigate if the type is used somehow
+// (like through reflection).
+// If the type is really never used, it is important to remove it 
+// to avoid maintaining useless code.
+// If you estimate the code of the type might be used in the future, 
+// at least comment it, and provide an explanatory comment about the future intentions.
+//
+// If a type is used somehow,
+// but still is matched by this rule, you can tag it with the attribute 
+// **IsNotDeadCodeAttribute** found in *NDepend.API.dll* to avoid matching the type again.
+// You can also provide your own attribute for this need, 
+// but then you'll need to adapt this code rule.
+//
+// Issues of this rule have a **Debt** equal to 15 minutes because it only
+// takes a short while to investigate if a type can be safely discarded.
+// The **Annual Interest** of issues of this rule, the annual cost to not
+// fix such issue, is proportional to the type #lines of code, because
+// the bigger the type is, the more it slows down maintenance.
+//</HowToFix>]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Potentially Dead Methods</Name>
+// <Id>ND1701:PotentiallyDeadMethods</Id>
+// <QualityGate Name="Critical Rules Violated" Unit="rules" />
+
+failif count > 0 rules
+// Filter procedure for methods that shouldn't be considered as dead
+let canMethodBeConsideredAsDeadProc = new Func<IMethod, bool>(
+    m => !m.IsPubliclyVisible &&       // Public methods might be used by client applications of your assemblies.
+         !m.IsEntryPoint &&            // Main() method is not used by-design.
+         !m.IsExplicitInterfaceImpl && // The IL code never explicitly calls explicit interface methods implementation.
+         !m.IsClassConstructor &&      // The IL code never explicitly calls class constructors.
+         !m.IsFinalizer &&             // The IL code never explicitly calls finalizers.
+         !m.IsVirtual &&               // Only check for non virtual method that are not seen as used in IL.
+         !(m.IsConstructor &&          // Don't take account of protected ctor that might be call by a derived ctors.
+           m.IsProtected) &&
+         !m.IsEventAdder &&            // The IL code never explicitly calls events adder/remover.
+         !m.IsEventRemover &&
+         !m.IsGeneratedByCompiler &&
+         !m.ParentType.IsDelegate &&
+
+         // Don't consider Global ASP.NET methods as unused
+         !m.ParentType.DeriveFrom("System.Web.HttpApplication".AllowNoMatch()) &&
+         
+         // Methods tagged with these attributes are called by the serialization infrastructure.
+         !m.HasAttribute("System.Runtime.Serialization.OnSerializingAttribute".AllowNoMatch()) &&
+         !m.HasAttribute("System.Runtime.Serialization.OnDeserializingAttribute".AllowNoMatch()) &&
+         !m.HasAttribute("System.Runtime.Serialization.OnSerializedAttribute".AllowNoMatch()) &&
+         !m.HasAttribute("System.Runtime.Serialization.OnDeserializedAttribute".AllowNoMatch()) &&
+
+         // If you don't want to link NDepend.API.dll, you can use your own 
+         // IsNotDeadCodeAttribute or UsedImplicitlyAttribute
+         // and adapt the source code of this rule.
+         !m.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+         !m.HasAttribute("JetBrains.Annotations.UsedImplicitlyAttribute".AllowNoMatch()) &&
+
+         // Methods called by the Unity engine
+         !m.HasAttribute("UnityEngine.RuntimeInitializeOnLoadMethodAttribute".AllowNoMatch()) &&
+         !m.HasAttribute("UnityEngine.InitializeOnLoadMethodAttribute".AllowNoMatch()) &&
+         !m.HasAttribute("UnityEditor.MenuItemAttribute".AllowNoMatch()) &&
+
+         // Don't consider public getters/setters 
+         // of classes that implement INotifyPropertyChanged
+         // as dead code.
+         !(m.IsPublic && (m.IsPropertyGetter || m.IsPropertySetter) &&
+           m.ParentType.Implement("System.ComponentModel.INotifyPropertyChanged".AllowNoMatch())) &&
+
+         // ASP.NET MVC Controller classes and methods are used only by the infrastructure
+         // except methods tagged by NonAction. 
+         !( (m.ParentType.SimpleName.EndsWith("Controller") ||
+             m.ParentType.DeriveFrom("Microsoft.AspNetCore.Mvc.Controller".AllowNoMatch()) ||
+             m.ParentType.DeriveFrom("Microsoft.AspNetCore.Mvc.ControllerBase".AllowNoMatch()) ||
+             m.ParentType.HasAttribute("Microsoft.AspNetCore.Mvc.ControllerAttribute".AllowNoMatch())) && 
+         !m.HasAttribute("System.Web.Mvc.NonActionAttribute".AllowNoMatch())) &&
+
+         // Methods of classes that derive from Unity classes are used implicitly by the Unity engine
+         !m.ParentType.BaseClasses.Any(bc => bc.ParentNamespace.Name.StartsWithAny("UnityEngine","UnityEditor")) &&
+
+         // Method might be called by expression in DebuggerDisplayAttribute
+         !m.ParentType.HasAttribute("System.Diagnostics.DebuggerDisplayAttribute".AllowNoMatch()) &&
+
+         // Instance ctor in class implementing interface(s) might be used through Dependency Injection
+         !(m.IsConstructor && (m.IsPublic || m.IsInternal) && !m.IsStatic && m.ParentType.NbInterfacesImplemented > 0)
+    )
+
+// Get methods unused
+let methodsUnused = 
+   from m in JustMyCode.Methods where 
+   m.NbMethodsCallingMe == 0 && 
+   canMethodBeConsideredAsDeadProc(m)
+   select m
+
+// Dead methods = methods used only by unused methods (recursive)
+let deadMethodsMetric = methodsUnused.FillIterative(
+   methods => // Unique loop, just to let a chance to build the hashset.
+              from o in (new object()).ToEnumerable()
+              // Use a hashet to make Intersect calls much faster!
+              let hashset = methods.ToHashSetEx()
+              from m in codeBase.Application.Methods.UsedByAny(methods).Except(methods)
+              where canMethodBeConsideredAsDeadProc(m) &&
+                    // Select methods called only by methods already considered as dead
+                    hashset.Intersect(m.MethodsCallingMe).Count() == m.NbMethodsCallingMe
+              select m)
+
+from m in JustMyCode.Methods.Intersect(deadMethodsMetric.DefinitionDomain)
+let depth = deadMethodsMetric[m]
+select new { 
+   m,
+   depth,
+   m.MethodsCallingMe,    
+   Debt = (10 + 3*depth).ToMinutes().ToDebt(),
+   AnnualInterest = (8 + (m.NbLinesOfCode ?? 1)).ToMinutes().ToAnnualInterest()
+}
+      
+//<Expl>
+// The *{0}* is not invoked within the context of analyzed code and may be a candidate for removal.
+//</Expl>
+      
+//<Desc>
+// This rule lists *potentially* **dead methods**.
+// A dead method is a method that can be removed
+// because it is never called by the program.
+//
+// This rule lists not only methods not called anywhere in code,
+// but also methods called only by methods not called anywhere in code.
+// This is why this rule comes with a column *MethodsCallingMe* and
+// this is why there is a code metric named *depth*:
+//
+// • A *depth* value of *0* means the method is not called.
+//
+// • A *depth* value of *1* means the method is called only by methods not called.
+//
+// • etc…
+//
+// By reading the source code of this rule, you'll see that by default,
+// *public* methods are not matched, because such method might not be called
+// by the analyzed code, but still be called by client code, not analyzed by NDepend.
+// This default behavior can be easily changed.
+//</Desc>
+
+//<HowToFix>
+// *Static analysis* cannot provide an *exact* list of dead methods,
+// because there are several ways to invoke a method *dynamically* (like through reflection).
+//
+// For each method matched by this query, first investigate if the method is invoked somehow
+// (like through reflection).
+// If the method is really never invoked, it is important to remove it 
+// to avoid maintaining useless code.
+// If you estimate the code of the method might be used in the future, 
+// at least comment it, and provide an explanatory comment about the future intentions.
+//
+// If a method is invoked somehow,
+// but still is matched by this rule, you can tag it with the attribute 
+// **IsNotDeadCodeAttribute** found in *NDepend.API.dll* to avoid matching the method again.
+// You can also provide your own attribute for this need, 
+// but then you'll need to adapt this code rule.
+//
+// Issues of this rule have a **Debt** equal to 10 minutes because it only
+// takes a short while to investigate if a method can be safely discarded.
+// On top of these 10 minutes, the depth of usage of such method adds up
+// 3 minutes per unity because dead method only called by dead code 
+// takes a bit more time to be investigated.
+//
+// The **Annual Interest** of issues of this rule, the annual cost to not
+// fix such issue, is proportional to the type #lines of code, because
+// the bigger the method is, the more it slows down maintenance.
+//</HowToFix>]]></Query>
+      <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="True"><![CDATA[// <Name>Potentially Dead Fields</Name>
+// <Id>ND1702:PotentiallyDeadFields</Id>
+// <QualityGate Name="Critical Rules Violated" Unit="rules" />
+
+failif count > 0 rules
+from f in JustMyCode.Fields where
+   f.NbMethodsUsingMe == 0 && 
+   !f.IsPublic &&     // Although not recommended, public fields might be used by client applications of your assemblies.
+   !f.IsLiteral &&    // The IL code never explicitly uses literal fields.
+   !f.IsEnumValue &&  // The IL code never explicitly uses enumeration value.
+    f.Name != "value__"  && // Field named 'value__' are relative to enumerations and the IL code never explicitly uses them.
+   !f.HasAttribute("NDepend.Attributes.IsNotDeadCodeAttribute".AllowNoMatch()) &&
+   !f.HasAttribute("JetBrains.Annotations.UsedImplicitlyAttribute".AllowNoMatch()) &&
+   !f.IsGeneratedByCompiler &&
+   // If you don't want to link NDepend.API.dll, you can use your own IsNotDeadCodeAttribute
+   // and adapt the source code of this rule.
+   
+   // Don't warn for fields tagged with these Unity specific attribute
+   !f.HasAttribute("UnityEngine.SerializeField".AllowNoMatch()) &&
+   !f.HasAttribute("UnityEngine.SerializeReference".AllowNoMatch()) &&
+   
+   // Don't warn about InlineArrayAttribute's field
+   !f.ParentType.HasAttribute("System.Runtime.CompilerServices.InlineArrayAttribute".AllowNoMatch())
+   
+select new {
+   f, 
+   Debt = 10.ToMinutes().ToDebt(),
+   AnnualInterest = 8.ToMinutes().ToAnnualInterest()
+}
+
+//<Expl>
+// The *{0}* is not read not assigned within the context of analyzed code and may be a candidate for removal.
+//</Expl>
+
+//<Desc>
+// This rule lists *potentially* **dead fields**.
+// A dead field is a field that can be removed
+// because it is never used by the program.
+//
+// By reading the source code of this rule, you'll see that by default,
+// *public* fields are not matched, because such field might not be used
+// by the analyzed code, but still be used by client code, not analyzed by NDepend.
+// This default behavior can be easily changed.
+// Some others default rules in the *Visibility* group, warn about public fields. 
+//
+// More restrictions are applied by this rule because of some *by-design* limitations.
+// NDepend mostly analyzes compiled IL code, and the information that
+// an enumeration value or a literal constant (which are fields) is used
+// is lost in IL code. Hence by default this rule won't match such field.
+//</Desc>
+
+//<HowToFix>
+// *Static analysis* cannot provide an *exact* list of dead fields,
+// because there are several ways to assign or read a field *dynamically* 
+// (like through reflection).
+//
+// For each field matched by this query, first investigate 
+// if the field is used somehow (like through reflection).
+// If the field is really never used, it is important to remove it 
+// to avoid maintaining a useless code element.
+//
+// If a field is used somehow,
+// but still is matched by this rule, you can tag it with the attribute 
+// **IsNotDeadCodeAttribute** found in *NDepend.API.dll* 
+// to avoid matching the field again.
+// You can also provide your own attribute for this need, 
+// but then you'll need to adapt this code rule.
+//
+// Issues of this rule have a **Debt** equal to 10 minutes because it only
+// takes a short while to investigate if a method can be safely discarded.
+// The **Annual Interest** of issues of this rule, the annual cost to not
+// fix such issue, is set by default to 8 minutes per unused field matched.
+//</HowToFix>]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[$ND1703$]]></Query>
     </Group>
     <Group Name="Security" Active="True" ShownInReport="False">
@@ -540,7 +873,9 @@ select new {
 }
 ]]></Query>
       <Query Active="True" DisplayList="True" DisplayStat="False" DisplaySelectionView="False" IsCriticalRule="False"><![CDATA[// <Name>Complexity Chech</Name>
-warnif count > 0
+// <QualityGate Name="Critical Rules Violated" Unit="rules" />
+
+failif count > 0 rules
 from m in Application.Methods
 where m.NbLinesOfCode > 0 // Игнорируем методы без кода
 let cyclomaticComplexity = m.CyclomaticComplexity // Получение цикломатической сложности

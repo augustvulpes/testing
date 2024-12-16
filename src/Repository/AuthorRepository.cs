@@ -12,6 +12,11 @@ namespace LibraryApp.Repository
             _context = context;
         }
 
+        private bool Unused()
+        {
+            return true;
+        }
+
         public bool AuthorExists(int id)
         {
             return _context.Authors.Any(a => a.Id == id);
