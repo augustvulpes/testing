@@ -1,5 +1,5 @@
 #!/bin/bash
-dotnet test -- RunConfiguration.ReporterSwitch=allure
+dotnet test LibraryApp.csproj -- RunConfiguration.ReporterSwitch=allure
 ls
 ls bin/
 ls bin/Debug/

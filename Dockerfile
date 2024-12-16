@@ -12,7 +12,7 @@ COPY ./src .
 RUN dotnet add LibraryApp.csproj package Allure.Xunit
 RUN dotnet build LibraryApp.csproj
 
-ENTRYPOINT ["dotnet", "test LibraryApp.csproj"]
+ENTRYPOINT ["dotnet", "test", "LibraryApp.csproj"]
 # RUN ["chmod", "+x", "./entrypoint.sh"]
 # # Запускаем тесты
 # ENTRYPOINT ["./entrypoint.sh"]
