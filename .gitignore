@@ -6,5 +6,6 @@ technicalUI/build
 src/NDependOut/
 benchmark/*/data
 benchmark/*/resources
+ndepend-output.txt
 
 */node_modules
