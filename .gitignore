@@ -3,5 +3,8 @@ bin/
 obj/
 Migrations/
 technicalUI/build
+src/NDependOut/
+benchmark/*/data
+benchmark/*/resources
 
 */node_modules

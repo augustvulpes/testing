@@ -1,0 +1,90 @@
+{
+    "numpyInv": {
+        "CPU": {
+            "min": 0.0,
+            "max": 576.8,
+            "median": 0.0
+        },
+        "RAM": {
+            "min": 0.0,
+            "max": 2.8601345118566,
+            "median": 0.0
+        },
+        "Read Bytes": {
+            "min": 0.0,
+            "max": 64712704.0,
+            "median": 0.0
+        },
+        "Write Bytes": {
+            "min": 0.0,
+            "max": 253952.0,
+            "median": 253952.0
+        }
+    },
+    "scipyInv": {
+        "CPU": {
+            "min": 0.0,
+            "max": 439.05,
+            "median": 0.0
+        },
+        "RAM": {
+            "min": 0.0,
+            "max": 2.9183469996868348,
+            "median": 0.0
+        },
+        "Read Bytes": {
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+        },
+        "Write Bytes": {
+            "min": 20480.0,
+            "max": 253952.0,
+            "median": 253952.0
+        }
+    },
+    "numpySolve": {
+        "CPU": {
+            "min": 0.0,
+            "max": 560.1,
+            "median": 0.0
+        },
+        "RAM": {
+            "min": 0.0,
+            "max": 2.49152643475408,
+            "median": 0.0
+        },
+        "Read Bytes": {
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+        },
+        "Write Bytes": {
+            "min": 0.0,
+            "max": 253952.0,
+            "median": 253952.0
+        }
+    },
+    "scipySolve": {
+        "CPU": {
+            "min": 0.0,
+            "max": 557.4,
+            "median": 0.0
+        },
+        "RAM": {
+            "min": 0.0,
+            "max": 2.8348895720290326,
+            "median": 0.0
+        },
+        "Read Bytes": {
+            "min": 0.0,
+            "max": 0.0,
+            "median": 0.0
+        },
+        "Write Bytes": {
+            "min": 0.0,
+            "max": 253952.0,
+            "median": 253952.0
+        }
+    }
+}
